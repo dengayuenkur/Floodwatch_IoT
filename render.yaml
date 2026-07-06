@@ -9,7 +9,7 @@ services:
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
-        value: 3.13.5
+        value: 3.12.7
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
