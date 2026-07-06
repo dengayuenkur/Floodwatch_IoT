@@ -390,7 +390,7 @@ X-API-Key: &lt;shared-secret&gt;</code></pre>
         ('3', 'Communication Layer', 'Authenticated HTTP POST over WiFi (LAN or cellular hotspot) carries JSON readings to the server endpoint',    '#20c997'),
         ('4', 'Server / Cloud Layer','Flask REST API validates, persists readings in SQLite, enforces auth, applies security controls, and emits WS events', '#198754'),
         ('5', 'Dashboard Layer',     'Browser-based Bootstrap 5 + Chart.js + Socket.IO dashboard provides real-time visualisation and alert management', '#ffc107'),
-        ('6', 'Alert / Warning',     'Twilio SMS and SMTP email dispatch to emergency responders when WARNING or DANGER thresholds are exceeded',    '#dc3545')
+        ('6', 'Alert / Warning',     'Twilio SMS and Resend email dispatch to emergency responders when WARNING or DANGER thresholds are exceeded',    '#dc3545')
       ] %}
       <div class="col-lg-10">
         <div class="layer-card layer-{{ num }}">

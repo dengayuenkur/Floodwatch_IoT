@@ -28,7 +28,7 @@ This system continuously monitors water levels at river stations, reservoirs, an
 
 - Triggers visual and audible local alerts on the sensor node (LEDs + buzzer)
 - Sends SMS alerts to emergency contacts via Twilio
-- Sends email alerts to authorities via SMTP
+- Sends email alerts to authorities via Resend (HTTP API)
 - Updates the live web dashboard in real-time
 - Stores all readings and events in a database for audit and analysis
 
@@ -55,7 +55,7 @@ This system continuously monitors water levels at river stations, reservoirs, an
                     │  Dashboard     │    │  Alert & Warning      │
                     │                │    │                       │
                     │  Web UI        │    │  SMS (Twilio)         │
-                    │  Real-time     │    │  Email (SMTP)         │
+                    │  Real-time     │    │  Email (Resend API)   │
                     │  Charts        │    │  Dashboard popup      │
                     │  Sensor status │    │  Siren / LEDs         │
                     └────────────────┘    └───────────────────────┘
@@ -196,9 +196,8 @@ TWILIO_AUTH_TOKEN=xxxxxxxxxx
 TWILIO_FROM_NUMBER=+1XXXXXXXXXX
 ALERT_PHONE_NUMBERS=+211912345678
 
-# Optional email alerts
-SMTP_USERNAME=youremail@gmail.com
-SMTP_PASSWORD=your_app_password
+# Optional email alerts (via Resend HTTP API — sign up free at resend.com)
+RESEND_API_KEY=re_xxxxxxxxxx
 ALERT_EMAILS=authority@juba.gov.ss
 ```
 

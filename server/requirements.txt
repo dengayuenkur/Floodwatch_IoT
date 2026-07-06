@@ -27,6 +27,10 @@ gunicorn==23.0.0
 # SMS alerts (optional — comment out if Twilio is not used)
 twilio==9.2.3
 
+# Email alerts via Resend HTTP API (SMTP ports are blocked outbound on
+# most PaaS free tiers, so alert_service.py uses Resend's HTTPS API instead)
+requests==2.32.3
+
 # Environment variable loading
 python-dotenv==1.0.1
 

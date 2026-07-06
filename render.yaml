@@ -20,15 +20,11 @@ services:
         generateValue: true
       - key: CORS_ORIGINS
         value: "*"
-      - key: SMTP_SERVER
-        value: smtp.gmail.com
-      - key: SMTP_PORT
-        value: "587"
+      - key: RESEND_FROM_EMAIL
+        value: onboarding@resend.dev
       # Secrets below are NOT stored in this file (public repo). Set the
       # real values in the Render dashboard: service -> Environment.
-      - key: SMTP_USERNAME
-        sync: false
-      - key: SMTP_PASSWORD
+      - key: RESEND_API_KEY
         sync: false
       - key: ALERT_EMAILS
         sync: false

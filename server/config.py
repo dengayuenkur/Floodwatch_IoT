@@ -55,11 +55,11 @@ class Config:
     ALERT_PHONE_NUMBERS = [n.strip() for n in
                            os.environ.get("ALERT_PHONE_NUMBERS", "").split(",") if n.strip()]
 
-    # ── Email (SMTP) ────────────────────────────────────────────────────────────
-    SMTP_SERVER   = os.environ.get("SMTP_SERVER",   "smtp.gmail.com")
-    SMTP_PORT     = int(os.environ.get("SMTP_PORT", "587"))
-    SMTP_USERNAME = os.environ.get("SMTP_USERNAME", "")
-    SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
+    # ── Email (Resend HTTP API) ─────────────────────────────────────────────────
+    # Raw SMTP (ports 25/465/587) is blocked outbound on many PaaS free tiers
+    # (Render included), so email alerts go through Resend's HTTPS API instead.
+    RESEND_API_KEY    = os.environ.get("RESEND_API_KEY", "")
+    RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
     # Comma-separated email addresses
     ALERT_EMAILS  = [e.strip() for e in
                      os.environ.get("ALERT_EMAILS", "").split(",") if e.strip()]

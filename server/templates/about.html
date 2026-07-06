@@ -155,7 +155,7 @@
         ('1', 'Design a low-cost, energy-efficient IoT sensor node using the ESP8266 microcontroller and HC-SR04 ultrasonic sensor capable of accurate water level measurement, demonstrated using a small water container.'),
         ('2', 'Develop a secure RESTful API backend with JWT authentication, role-based access control, pre-shared API key authentication for sensor nodes, input validation, rate limiting, and comprehensive audit logging.'),
         ('3', 'Implement a real-time web dashboard using WebSocket (Socket.IO) that presents live water level readings, multi-sensor status, trend charts, and an alert management interface to authorised operators.'),
-        ('4', 'Integrate a multi-channel alert system (SMS via Twilio, email via SMTP) that automatically notifies emergency responders when water levels cross configurable WARNING or DANGER thresholds.'),
+        ('4', 'Integrate a multi-channel alert system (SMS via Twilio, email via the Resend HTTP API) that automatically notifies emergency responders when water levels cross configurable WARNING or DANGER thresholds.'),
         ('5', 'Conduct a systematic threat analysis using the STRIDE model and evaluate the system against the OWASP IoT Top 10 security checklist, documenting identified threats and mitigations.'),
         ('6', 'Demonstrate that affordable IoT hardware and open-source software can deliver a deployable, secure, and maintainable early warning system suitable for low-resource nation contexts.')
       ] %}
@@ -265,7 +265,7 @@
         ('bi-shield-lock', 'Auth', 'Flask-JWT-Extended', 'text-warning'),
         ('bi-broadcast', 'Real-Time', 'Flask-SocketIO', 'text-info'),
         ('bi-phone-fill', 'SMS Alerts', 'Twilio API', 'text-danger'),
-        ('bi-envelope-fill', 'Email Alerts', 'SMTP / Gmail', 'text-primary'),
+        ('bi-envelope-fill', 'Email Alerts', 'Resend API', 'text-primary'),
         ('bi-bar-chart-fill', 'Charts', 'Chart.js 4', 'text-success'),
         ('bi-layout-text-window', 'UI Framework', 'Bootstrap 5', 'text-primary'),
         ('bi-lock-fill', 'Rate Limiting', 'Flask-Limiter', 'text-secondary')
@@ -301,7 +301,7 @@
             ('Phase 2 — System Design & Threat Modelling', 'Applied STRIDE threat modelling to the full system. Mapped each threat to a mitigation. Evaluated proposed controls against the OWASP IoT Top 10 checklist.'),
             ('Phase 3 — Hardware Prototyping', 'Wired ESP8266 + HC-SR04 breadboard prototype. Wrote and validated firmware including 3-reading average, alert level logic, LED/buzzer control, and HTTP retry.'),
             ('Phase 4 — Backend Development', 'Built the Flask application factory with JWT auth, API-key decorator, RBAC, SQLAlchemy models, rate limiting, audit logging, and Socket.IO real-time broadcast.'),
-            ('Phase 5 — Dashboard & Alerting', 'Developed the Bootstrap 5 dashboard with Chart.js live chart, sensor cards, alert management, and the Twilio SMS + SMTP email alert pipeline.'),
+            ('Phase 5 — Dashboard & Alerting', 'Developed the Bootstrap 5 dashboard with Chart.js live chart, sensor cards, alert management, and the Twilio SMS + Resend email alert pipeline.'),
             ('Phase 6 — Integration & Testing', 'End-to-end integration testing: sensor → server → dashboard → alerts. Security testing: brute-force rate limiting, invalid API key, expired token, role escalation attempts.'),
             ('Phase 7 — Documentation & Submission', 'Completed academic dissertation (12,000+ words) with full literature review, methodology, results, security analysis, conclusions, and 30 real academic references.')
           ] %}

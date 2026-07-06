@@ -3,21 +3,21 @@ Alert notification service.
 
 Supports:
   • SMS via Twilio REST API
-  • Email via SMTP (TLS)
+  • Email via the Resend HTTP API
 
 Both channels are optional: if the relevant credentials are absent the
 function returns False and logs a warning rather than raising an exception,
 keeping the system operational even when external services are unavailable.
 """
 import logging
-import smtplib
 from datetime import datetime, timezone
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
+import requests
 from flask import current_app
 
 logger = logging.getLogger(__name__)
+
+RESEND_API_URL = "https://api.resend.com/emails"
 
 # ── Alert message templates ───────────────────────────────────────────────────
 
@@ -99,45 +99,46 @@ def send_sms_alert(sensor_id: str, location: str,
 
 def send_email_alert(sensor_id: str, location: str,
                      water_level: float, alert_level: int) -> bool:
-    """Send an email alert to all configured recipients via SMTP."""
+    """Send an email alert to all configured recipients via the Resend HTTP API."""
+    cfg        = current_app.config
+    api_key    = cfg.get("RESEND_API_KEY", "")
+    from_email = cfg.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
+    recipients = cfg.get("ALERT_EMAILS", [])
+
+    if not (api_key and recipients):
+        logger.warning("Email config incomplete — skipping email alert")
+        return False
+
+    tpl     = _TEMPLATES.get(alert_level, _TEMPLATES[2])
+    now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    subject = tpl["subject"].format(location=location)
+    body    = tpl["body"].format(
+        sensor_id=sensor_id,
+        location=location,
+        water_level=water_level,
+        timestamp=now_str,
+    )
+
     try:
-        cfg        = current_app.config
-        smtp_host  = cfg.get("SMTP_SERVER",   "smtp.gmail.com")
-        smtp_port  = cfg.get("SMTP_PORT",     587)
-        username   = cfg.get("SMTP_USERNAME", "")
-        password   = cfg.get("SMTP_PASSWORD", "")
-        recipients = cfg.get("ALERT_EMAILS",  [])
-
-        if not (username and password and recipients):
-            logger.warning("Email config incomplete — skipping email alert")
-            return False
-
-        tpl     = _TEMPLATES.get(alert_level, _TEMPLATES[2])
-        now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-        subject = tpl["subject"].format(location=location)
-        body    = tpl["body"].format(
-            sensor_id=sensor_id,
-            location=location,
-            water_level=water_level,
-            timestamp=now_str,
+        resp = requests.post(
+            RESEND_API_URL,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "from": f"Flood Monitor <{from_email}>",
+                "to": recipients,
+                "subject": subject,
+                "text": body,
+            },
+            timeout=10,
         )
-
-        msg             = MIMEMultipart("alternative")
-        msg["Subject"]  = subject
-        msg["From"]     = username
-        msg["To"]       = ", ".join(recipients)
-        msg.attach(MIMEText(body, "plain"))
-
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as srv:
-            srv.ehlo()
-            srv.starttls()
-            srv.login(username, password)
-            srv.sendmail(username, recipients, msg.as_string())
+        if resp.status_code >= 400:
+            logger.error("Email alert failed: HTTP %s — %s", resp.status_code, resp.text)
+            return False
 
         logger.info("Email alert sent to %s", recipients)
         return True
 
-    except Exception as exc:
+    except requests.RequestException as exc:
         logger.error("Email alert failed: %s", exc)
         return False
 
