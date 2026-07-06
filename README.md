@@ -225,8 +225,14 @@ Use `gunicorn` + `nginx` for production:
 
 ```bash
 pip install gunicorn
-gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:5000 "app:create_app('production')"
+gunicorn --worker-class gthread --workers 1 --threads 8 -b 0.0.0.0:5000 "app:create_app('production')"
 ```
+
+Flask-SocketIO is configured with `async_mode="threading"` (see `app.py`), so
+gunicorn's `gthread` worker is used instead of `eventlet`/`gevent` — no extra
+async library or monkey-patching needed. Socket.IO falls back to HTTP
+long-polling for real-time updates, which is sufficient for this system's
+update frequency.
 
 Configure nginx as a reverse proxy with SSL/TLS certificates (Let's Encrypt).
 
@@ -260,7 +266,7 @@ git push -u origin main
 3. Render reads `render.yaml` and provisions a **Web Service** with:
    - `rootDir: server`
    - Build command: `pip install -r requirements.txt`
-   - Start command: `gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:$PORT "app:create_app('production')"`
+   - Start command: `gunicorn --worker-class gthread --workers 1 --threads 8 -b 0.0.0.0:$PORT "app:create_app('production')"`
    - Auto-generated `SECRET_KEY`, `JWT_SECRET_KEY`, `SENSOR_API_KEY`
 4. Click **Apply** — Render builds and deploys automatically. Every future
    `git push` to `main` triggers a new deploy.
@@ -286,9 +292,10 @@ To persist data:
 ### Alternatives to Render
 
 Any host that can run a long-lived Python process works the same way
-(`gunicorn --worker-class eventlet -w 1 ...`): Railway, Fly.io, or a VPS with
-nginx as described above. **GitHub Pages will not work** — it only serves
-static files and cannot run the Flask/SQLite/Socket.IO backend.
+(`gunicorn --worker-class gthread --workers 1 --threads 8 ...`): Railway,
+Fly.io, or a VPS with nginx as described above. **GitHub Pages will not
+work** — it only serves static files and cannot run the Flask/SQLite/Socket.IO
+backend.
 
 ---
 

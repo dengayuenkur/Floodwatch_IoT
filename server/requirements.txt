@@ -19,10 +19,9 @@ Flask-Limiter==3.7.0
 # Password hashing (used by Werkzeug, already bundled with Flask)
 # Werkzeug is installed as a Flask dependency
 
-# WebSocket server (threading mode)
-eventlet==0.36.1
-
 # Production WSGI server (used on Render / any non-dev deployment)
+# Flask-SocketIO runs in async_mode="threading", so gunicorn's default
+# gthread worker is used in production — no eventlet/gevent needed.
 gunicorn==23.0.0
 
 # SMS alerts (optional — comment out if Twilio is not used)
