@@ -310,11 +310,24 @@ Open `firmware/flood_sensor/flood_sensor.ino`
 ```cpp
 const char* WIFI_SSID      = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD  = "YOUR_WIFI_PASSWORD";
+
+// Local server on your LAN:
 const char* SERVER_HOST    = "http://YOUR_SERVER_IP:5000";
+// Deployed on Render (HTTPS only — see "Deploying to GitHub + Render" above):
+// const char* SERVER_HOST = "https://YOUR-SERVICE.onrender.com";
+
 const char* API_KEY        = "PASTE_SENSOR_API_KEY_FROM_.ENV";
 const char* SENSOR_ID      = "SENSOR_001";      // unique per device
 const char* SENSOR_LOCATION = "Station Name";
 ```
+
+If pointing at Render (or any HTTPS endpoint), the sketch already uses
+`BearSSL::WiFiClientSecure` with `setInsecure()` — the ESP8266 doesn't
+validate the server's TLS certificate (not enough flash/RAM for a full CA
+store). That's an accepted trade-off for a sensor with no confidential data;
+pin Render's root CA instead if your threat model requires it. `HTTP_TIMEOUT_MS`
+is also set generously (15 s, 4 retries) to tolerate Render's free-tier
+cold start after idle spin-down.
 
 Also set the physical installation height:
 ```cpp

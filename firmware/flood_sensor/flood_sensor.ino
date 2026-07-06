@@ -39,6 +39,7 @@
  */
 
 #include <ESP8266WiFi.h>
+#include <WiFiClientSecureBearSSL.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
 
@@ -47,9 +48,10 @@ const char* WIFI_SSID      = "Deng";       // <-- CHANGE
 const char* WIFI_PASSWORD  = "dengayuen";   // <-- CHANGE
 
 // ─── Server Configuration ───────────────────────────────────
-const char* SERVER_HOST     = "http://172.20.10.3:5000";  // <-- CHANGE to your PC's LAN IP
+// Render serves HTTPS only — use your deployed URL, no trailing slash.
+const char* SERVER_HOST     = "https://flood-monitoring-system.onrender.com";  // <-- CHANGE to your Render URL
 const char* API_ENDPOINT    = "/api/v1/reading";
-const char* API_KEY         = "o5X6DxamOWvQAoJgOwNP9qIqVJWDi1LXCSlqQ71liZE"; // <-- CHANGE (copy from server/.env)
+const char* API_KEY         = "PASTE_SENSOR_API_KEY_FROM_RENDER_DASHBOARD"; // <-- CHANGE (Render dashboard -> service -> Environment)
 const char* SENSOR_ID       = "Juba Bridge";
 const char* SENSOR_LOCATION = "Juba Bridge Simulation — IoT Lab, South Sudan";
 
@@ -90,15 +92,17 @@ const char* SENSOR_LOCATION = "Juba Bridge Simulation — IoT Lab, South Sudan";
 // ─── Timing ─────────────────────────────────────────────────
 #define READING_INTERVAL_MS    3000UL   // reading every 3 s (demo-friendly)
 #define WIFI_TIMEOUT_MS       30000UL   // 30 s Wi-Fi connect timeout
-#define HTTP_TIMEOUT_MS        8000     // 8 s HTTP request timeout
-#define MAX_RETRIES               3
+// Render's free tier spins the service down after ~15 min idle and can take
+// 30-50 s to wake on the next request — allow generous timeout + retries.
+#define HTTP_TIMEOUT_MS       15000     // 15 s HTTP request timeout
+#define MAX_RETRIES               4
 
 // ─── Globals ────────────────────────────────────────────────
 float          g_lastDistance    = -1.0f;
 int            g_alertLevel      = 0;
 unsigned long  g_lastReadingTime = 0;
 unsigned long  g_lastReconnTime  = 0;
-WiFiClient     g_wifiClient;
+BearSSL::WiFiClientSecure g_wifiClient;
 
 // ============================================================
 //  SETUP
@@ -125,6 +129,14 @@ void setup() {
 
     runSelfTest();
     connectWiFi();
+
+    // ESP8266 lacks the flash/RAM to maintain a full CA trust store, so we
+    // skip certificate validation for the outbound HTTPS connection to
+    // Render. This trusts the network path, not the cert chain — acceptable
+    // for a sensor with no confidential data, but not a general-purpose
+    // pattern. Pin Render's Let's Encrypt root CA instead if that matters
+    // for your threat model.
+    g_wifiClient.setInsecure();
 }
 
 // ============================================================
