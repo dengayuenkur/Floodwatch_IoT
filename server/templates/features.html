@@ -1,0 +1,426 @@
+{% extends "base_public.html" %}
+{% set active_page = 'features' %}
+{% block title %}Features — FloodWatch IoT{% endblock %}
+
+{% block head_extra %}
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, #040b14 0%, #0a1f3c 100%);
+    padding: 70px 0 50px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .feature-section { padding: 70px 0; }
+  .feature-section:nth-child(odd)  { background: #0d1117; }
+  .feature-section:nth-child(even) { background: #0a1628; }
+
+  .icon-box {
+    width: 60px; height: 60px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+  }
+  .layer-card {
+    background: #12192a;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 4px solid var(--c, #0d6efd);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: transform .2s;
+  }
+  .layer-card:hover { transform: translateX(4px); }
+
+  .spec-table td, .spec-table th {
+    background: transparent !important;
+    border-color: rgba(255,255,255,0.08) !important;
+    color: #ccc;
+    padding: 10px 14px;
+  }
+  .spec-table th { color: #fff; font-weight: 600; }
+
+  .security-pill {
+    background: rgba(13,110,253,0.12);
+    border: 1px solid rgba(13,110,253,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: .82rem;
+    color: #7ab8ff;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Per-layer colour tokens — avoids Jinja in style attributes */
+  .layer-1 { --c: #0d6efd; --c-bg: #0d6efd22; --c-border: #0d6efd55; }
+  .layer-2 { --c: #0dcaf0; --c-bg: #0dcaf022; --c-border: #0dcaf055; }
+  .layer-3 { --c: #20c997; --c-bg: #20c99722; --c-border: #20c99755; }
+  .layer-4 { --c: #198754; --c-bg: #19875422; --c-border: #19875455; }
+  .layer-5 { --c: #ffc107; --c-bg: #ffc10722; --c-border: #ffc10755; }
+  .layer-6 { --c: #dc3545; --c-bg: #dc354522; --c-border: #dc354555; }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Page hero -->
+<section class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="text-secondary text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active text-white">Features</li>
+      </ol>
+    </nav>
+    <div class="section-eyebrow">System Capabilities</div>
+    <h1 class="display-5 fw-bold text-white mt-2">Features &amp; Architecture</h1>
+    <p class="text-secondary mt-2" style="max-width:580px;">
+      A deep-dive into every capability of the Secure IoT Flood Monitoring System —
+      from hardware sensing to cloud-based alerting and cybersecurity controls.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════ 1. HARDWARE & SENSING ═══════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5">
+        <div class="section-eyebrow">Layer 1 &amp; 2</div>
+        <h2 class="section-title h3 mt-2">Hardware &amp; Edge Sensing</h2>
+        <p class="text-secondary mt-3">
+          The system uses a <strong class="text-white">NodeMCU ESP8266</strong> microcontroller paired with a
+          <strong class="text-white">HC-SR04 ultrasonic sensor</strong> — a widely available, low-cost
+          sensor perfect for demos and prototyping; mount it above the water,
+          keeping the electronics dry.
+        </p>
+        <div class="mt-4 d-flex flex-column gap-3">
+          <div class="d-flex gap-3 align-items-start">
+            <div class="icon-box bg-primary bg-opacity-10 border border-primary border-opacity-25 text-primary flex-shrink-0" style="width:40px;height:40px;font-size:1rem;border-radius:8px;">
+              <i class="bi bi-rulers"></i>
+            </div>
+            <div>
+              <div class="text-white fw-semibold small">3-Reading Average</div>
+              <div class="text-secondary small">Three pulses averaged per measurement to eliminate sensor noise and false readings.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <div class="icon-box bg-success bg-opacity-10 border border-success border-opacity-25 text-success flex-shrink-0" style="width:40px;height:40px;font-size:1rem;border-radius:8px;">
+              <i class="bi bi-diagram-3"></i>
+            </div>
+            <div>
+              <div class="text-white fw-semibold small">LED + Buzzer Indicators</div>
+              <div class="text-secondary small">On-device green/yellow/red LEDs and audible buzzer provide local alerting without network dependency.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <div class="icon-box bg-warning bg-opacity-10 border border-warning border-opacity-25 text-warning flex-shrink-0" style="width:40px;height:40px;font-size:1rem;border-radius:8px;">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <div>
+              <div class="text-white fw-semibold small">HTTP Retry Logic</div>
+              <div class="text-secondary small">Up to 3 automatic retries with 3-second delay if the server is temporarily unreachable.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <div class="icon-box bg-info bg-opacity-10 border border-info border-opacity-25 text-info flex-shrink-0" style="width:40px;height:40px;font-size:1rem;border-radius:8px;">
+              <i class="bi bi-wifi-off"></i>
+            </div>
+            <div>
+              <div class="text-white fw-semibold small">Offline Resilience</div>
+              <div class="text-secondary small">Continues measuring and operating LEDs/buzzer locally even when WiFi connectivity is lost.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <table class="table spec-table">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Specification</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>NodeMCU ESP8266</td><td>80/160 MHz, 4MB Flash, 802.11 b/g/n WiFi</td><td>Edge controller</td></tr>
+            <tr><td>HC-SR04</td><td>2 – 300 cm practical range, ±0.3 cm accuracy, 5V VCC</td><td>Ultrasonic distance sensor</td></tr>
+            <tr><td>Voltage divider</td><td>1 kΩ + 2 kΩ resistors on Echo pin</td><td>5V→3.3V level shift for ESP8266</td></tr>
+            <tr><td>Green LED (D5)</td><td>GPIO14, 330Ω resistor</td><td>SAFE indicator</td></tr>
+            <tr><td>Yellow LED (D6)</td><td>GPIO12, 330Ω resistor</td><td>WARNING indicator</td></tr>
+            <tr><td>Red LED (D7)</td><td>GPIO13, 330Ω resistor</td><td>DANGER indicator</td></tr>
+            <tr><td>Active Buzzer (D8)</td><td>GPIO15, PWM tone control</td><td>Audible alarm</td></tr>
+            <tr><td>Power supply</td><td>5V USB or solar + LiPo + charge controller</td><td>Field power</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 2. CONNECTIVITY ═══════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="row g-5 align-items-center flex-row-reverse">
+      <div class="col-lg-5">
+        <div class="section-eyebrow">Layer 3</div>
+        <h2 class="section-title h3 mt-2">Communication &amp; Connectivity</h2>
+        <p class="text-secondary mt-3">
+          Sensor data flows to the server via authenticated HTTP POST over WiFi —
+          designed for both LAN deployments and cellular hotspot connectivity.
+        </p>
+        <div class="mt-4 row g-3">
+          <div class="col-6">
+            <div class="p-3 rounded-3 section-card text-center">
+              <i class="bi bi-send-check-fill text-primary fs-3 mb-2 d-block"></i>
+              <div class="text-white small fw-semibold">HTTP POST</div>
+              <div class="text-secondary" style="font-size:.75rem;">JSON payload to /api/v1/reading</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 rounded-3 section-card text-center">
+              <i class="bi bi-lock-fill text-warning fs-3 mb-2 d-block"></i>
+              <div class="text-white small fw-semibold">API Key Auth</div>
+              <div class="text-secondary" style="font-size:.75rem;">X-API-Key header on every request</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 rounded-3 section-card text-center">
+              <i class="bi bi-broadcast-pin text-info fs-3 mb-2 d-block"></i>
+              <div class="text-white small fw-semibold">WebSocket</div>
+              <div class="text-secondary" style="font-size:.75rem;">Socket.IO pushes to dashboard</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 rounded-3 section-card text-center">
+              <i class="bi bi-wifi fs-3 text-success mb-2 d-block"></i>
+              <div class="text-white small fw-semibold">Auto-reconnect</div>
+              <div class="text-secondary" style="font-size:.75rem;">WiFi watchdog with 30s timeout</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="section-card rounded-3 p-4">
+          <div class="text-secondary small mb-3 fw-semibold">
+            <i class="bi bi-code-slash me-2 text-primary"></i>Sample Sensor Payload
+          </div>
+          <pre class="text-success mb-0" style="font-size:.82rem;white-space:pre-wrap;"><code>{
+  "sensor_id":   "SENSOR_NILE_01",
+  "location":    "Nile River — Juba Bridge",
+  "distance":    87.34,
+  "water_level": 212.66,
+  "alert_level": 2,
+  "rssi":        -62
+}</code></pre>
+          <div class="mt-3 pt-3 border-top border-secondary">
+            <div class="text-secondary small fw-semibold mb-2">Request headers:</div>
+            <pre class="text-info mb-0" style="font-size:.82rem;"><code>POST /api/v1/reading  HTTP/1.1
+Content-Type: application/json
+X-API-Key: &lt;shared-secret&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 3. SECURITY ═══════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">Layer 4 — Cybersecurity</div>
+      <h2 class="section-title h3 mt-2">Security Controls</h2>
+      <p class="text-secondary mx-auto" style="max-width:520px;">
+        Designed to the OWASP IoT Top 10 and STRIDE threat model —
+        every component has explicit security controls.
+      </p>
+    </div>
+
+    <div class="row g-3 mb-4 justify-content-center">
+      {% for pill in ['JWT Access Tokens (8h)', 'Refresh Tokens (30d)', 'Pre-shared API Key', 'bcrypt Password Hashing', 'Role-Based Access Control', 'Rate Limiting (Flask-Limiter)', 'Audit Log (AuditLog table)', 'CORS Policy', 'SQL-Injection Safe ORM', 'STRIDE Threat Model', 'OWASP IoT Top 10', 'Input Validation'] %}
+      <div class="col-auto">
+        <div class="security-pill">
+          <i class="bi bi-shield-check"></i>{{ pill }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="row g-4 mt-2">
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-key-fill text-warning fs-2 mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">JWT Authentication</h6>
+          <p class="text-secondary small mb-0">
+            8-hour access tokens with role claims (admin/operator/viewer) signed with
+            HS256. Expired-token and invalid-token error handlers return structured JSON —
+            never HTML error pages that could leak stack traces.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-cpu-fill text-primary fs-2 mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">Sensor API Key</h6>
+          <p class="text-secondary small mb-0">
+            Every ESP8266 POST must include a pre-shared API key in the
+            <code class="text-info">X-API-Key</code> header. Mismatches are logged to
+            the AuditLog table with the source IP address for forensic review.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-person-badge-fill text-info fs-2 mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">Role-Based Access Control</h6>
+          <p class="text-secondary small mb-0">
+            Admin: full access including user management, audit log, sensor creation.
+            Operator: can acknowledge alerts and submit readings.
+            Viewer: read-only dashboard access. Roles are embedded in JWT claims.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-speedometer fs-2 text-danger mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">Rate Limiting</h6>
+          <p class="text-secondary small mb-0">
+            Login endpoint: 10 requests/minute. Sensor POST: 200/minute.
+            Default: 300/day, 60/hour. Limits mitigate brute-force login attacks
+            and sensor flooding / DoS attempts.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-journal-text text-success fs-2 mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">Audit Logging</h6>
+          <p class="text-secondary small mb-0">
+            Every login, failed auth attempt, user creation, sensor registration,
+            and alert acknowledgement is written to the <code class="text-info">AuditLog</code> table
+            with event type, user, IP address, and timestamp.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <i class="bi bi-database-lock-fill text-secondary fs-2 mb-3 d-block"></i>
+          <h6 class="text-white fw-bold">SQL-Injection Safe</h6>
+          <p class="text-secondary small mb-0">
+            All database access goes through SQLAlchemy ORM with parameterised
+            queries — raw SQL strings are never constructed from user input.
+            Column types are explicitly mapped for type coercion safety.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 4. DASHBOARD ═══════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="section-eyebrow">Layer 5</div>
+        <h2 class="section-title h3 mt-2">Live Dashboard</h2>
+        <p class="text-secondary mt-3">
+          The web dashboard updates in real time via WebSocket — no page refresh required.
+          Built with Bootstrap 5 and Chart.js, it works on desktop and mobile browsers.
+        </p>
+        <ul class="list-unstyled mt-4">
+          {% for item in [
+            ('bi-bar-chart-line-fill text-primary', 'Real-time Chart.js water level graph per sensor, up to 60 data points'),
+            ('bi-hdd-network-fill text-info', 'Sensor status cards showing online/offline, water level, and alert badge'),
+            ('bi-bell-fill text-warning', 'Active alerts table with one-click acknowledgement for operators/admins'),
+            ('bi-grid-1x2-fill text-success', 'Stats cards: active sensors, max level, open alerts, total readings'),
+            ('bi-chat-dots-fill text-danger', 'Toast notifications for live incoming WARNING and DANGER alerts'),
+            ('bi-funnel-fill text-secondary', 'Per-sensor chart filter to isolate individual sensor trends')
+          ] %}
+          <li class="d-flex gap-3 align-items-start mb-3">
+            <i class="bi {{ item[0] }} mt-1 flex-shrink-0"></i>
+            <span class="text-secondary small">{{ item[1] }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-lg-6">
+        <div class="section-card rounded-3 p-4">
+          <div class="small text-secondary mb-3 fw-semibold">
+            <i class="bi bi-window me-2 text-primary"></i>Dashboard Sections
+          </div>
+          {% for section, desc, color in [
+            ('Stats Row', '4 KPI cards — sensors, max level, open alerts, total readings', 'text-primary'),
+            ('Live Chart', 'Multi-sensor water level chart with threshold band overlays', 'text-info'),
+            ('Sensor Cards', 'Per-sensor status with level bar, online dot, distance/level readout', 'text-success'),
+            ('Alerts Table', 'Unresolved alerts with type badge, water level, time, acknowledge button', 'text-warning'),
+            ('Readings Table', 'Last 50 readings newest-first with sensor, distance, level, RSSI, time', 'text-secondary'),
+            ('WebSocket Badge', 'Green Live / Grey Disconnected badge indicating real-time connection status', 'text-danger')
+          ] %}
+          <div class="d-flex justify-content-between align-items-start py-2 border-bottom border-secondary">
+            <div>
+              <div class="text-white small fw-semibold">{{ section }}</div>
+              <div class="text-secondary" style="font-size:.75rem;">{{ desc }}</div>
+            </div>
+            <i class="bi bi-check-circle-fill {{ color }} flex-shrink-0 mt-1"></i>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ 5. SIX-LAYER ARCHITECTURE ═══════ -->
+<section class="feature-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">System Design</div>
+      <h2 class="section-title h3 mt-2">Six-Layer Architecture</h2>
+      <p class="text-secondary mx-auto" style="max-width:520px;">
+        The system follows a clearly separated six-layer IoT reference architecture
+        ensuring modularity, security boundaries, and maintainability.
+      </p>
+    </div>
+
+    <div class="row g-3 justify-content-center">
+      {% for num, name, desc, color in [
+        ('1', 'Sensing Layer',       'HC-SR04 ultrasonic sensor measures water-surface distance every 10 seconds via timed sound pulses',        '#0d6efd'),
+        ('2', 'Edge Processing',     'NodeMCU ESP8266 computes water level, determines alert level, drives LEDs/buzzer, and manages WiFi/HTTP',    '#0dcaf0'),
+        ('3', 'Communication Layer', 'Authenticated HTTP POST over WiFi (LAN or cellular hotspot) carries JSON readings to the server endpoint',    '#20c997'),
+        ('4', 'Server / Cloud Layer','Flask REST API validates, persists readings in SQLite, enforces auth, applies security controls, and emits WS events', '#198754'),
+        ('5', 'Dashboard Layer',     'Browser-based Bootstrap 5 + Chart.js + Socket.IO dashboard provides real-time visualisation and alert management', '#ffc107'),
+        ('6', 'Alert / Warning',     'Twilio SMS and SMTP email dispatch to emergency responders when WARNING or DANGER thresholds are exceeded',    '#dc3545')
+      ] %}
+      <div class="col-lg-10">
+        <div class="layer-card layer-{{ num }}">
+          <div class="d-flex align-items-start gap-3">
+            <div class="fw-bold text-white rounded-2 d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:36px;height:36px;background:var(--c-bg);border:1px solid var(--c-border);color:var(--c);">
+              {{ num }}
+            </div>
+            <div>
+              <div class="fw-bold text-white">{{ name }}</div>
+              <div class="text-secondary small mt-1">{{ desc }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CTA ═══════ -->
+<section style="background:#040b14;padding:60px 0;border-top:1px solid rgba(255,255,255,0.07);">
+  <div class="container text-center">
+    <h2 class="text-white fw-bold mb-3">Ready to explore the system?</h2>
+    <p class="text-secondary mb-4">Log in to the secure dashboard to see all of these features live.</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="/login"    class="btn btn-primary btn-lg px-4"><i class="bi bi-box-arrow-in-right me-2"></i>Log In</a>
+      <a href="/about"    class="btn btn-outline-light btn-lg px-4"><i class="bi bi-info-circle me-2"></i>About</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

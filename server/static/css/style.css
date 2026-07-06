@@ -1,0 +1,119 @@
+/* ============================================================
+   FloodWatch IoT — Custom Stylesheet
+   Author: Deng Daniel Ayuen Kur (240103002054)
+   ============================================================ */
+
+/* ── Root variables ────────────────────────────────────────── */
+:root {
+  --fw-safe:    #198754;
+  --fw-warning: #ffc107;
+  --fw-danger:  #dc3545;
+  --fw-dark:    #1a1d23;
+  --fw-card:    #212529;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--fw-dark);
+  color: #e0e0e0;
+}
+
+/* ── Scrollbar (Webkit) ────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: #2a2d35; }
+::-webkit-scrollbar-thumb  { background: #4a4f5c; border-radius: 3px; }
+
+/* ── Stat cards ────────────────────────────────────────────── */
+.stat-card {
+  background-color: var(--fw-card) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+}
+
+/* ── Alert level colour helpers ────────────────────────────── */
+.alert-safe    { color: var(--fw-safe);    }
+.alert-warning { color: var(--fw-warning); }
+.alert-danger  { color: var(--fw-danger);  }
+
+.bg-alert-safe    { background-color: rgba(25, 135, 84, 0.15);  border: 1px solid var(--fw-safe);    }
+.bg-alert-warning { background-color: rgba(255, 193, 7, 0.12);  border: 1px solid var(--fw-warning); }
+.bg-alert-danger  { background-color: rgba(220, 53, 69, 0.15);  border: 1px solid var(--fw-danger);  }
+
+/* ── Sensor card ────────────────────────────────────────────── */
+.sensor-card {
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+.sensor-card:hover {
+  filter: brightness(1.1);
+}
+
+.sensor-level-bar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.sensor-level-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* ── Online / offline indicator dot ───────────────────────── */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.status-dot.online  { background: var(--fw-safe);   box-shadow: 0 0 5px var(--fw-safe);   }
+.status-dot.offline { background: #6c757d;           }
+
+/* ── Alert badge pulse (danger) ────────────────────────────── */
+@keyframes pulse-danger {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,53,69,0.7); }
+  50%       { box-shadow: 0 0 0 6px rgba(220,53,69,0);  }
+}
+.pulse-danger {
+  animation: pulse-danger 1.4s infinite;
+}
+
+/* ── Chart canvas ───────────────────────────────────────────── */
+#waterLevelChart {
+  max-height: 280px;
+}
+
+/* ── Table overrides ────────────────────────────────────────── */
+.table-dark { --bs-table-bg: transparent; }
+.table-hover > tbody > tr:hover > * {
+  background-color: rgba(255,255,255,0.06) !important;
+}
+
+/* ── Toast ──────────────────────────────────────────────────── */
+.toast-fw {
+  min-width: 280px;
+  background: #2a2d35;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+.toast-fw.toast-safe    { border-left: 4px solid var(--fw-safe);    }
+.toast-fw.toast-warning { border-left: 4px solid var(--fw-warning); }
+.toast-fw.toast-danger  { border-left: 4px solid var(--fw-danger);  }
+
+/* ── Responsive tweaks ─────────────────────────────────────── */
+@media (max-width: 576px) {
+  .stat-card .fs-3 { font-size: 1.4rem !important; }
+  .navbar-brand    { font-size: 1rem; }
+}

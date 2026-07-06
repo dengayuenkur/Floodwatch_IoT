@@ -1,0 +1,380 @@
+{% extends "base_public.html" %}
+{% set active_page = 'about' %}
+{% block title %}About — FloodWatch IoT{% endblock %}
+
+{% block head_extra %}
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, #040b14 0%, #0a1f3c 100%);
+    padding: 70px 0 50px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .about-section { padding: 70px 0; }
+  .about-section:nth-child(odd)  { background: #0d1117; }
+  .about-section:nth-child(even) { background: #0a1628; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 6px; bottom: 0;
+    width: 2px; background: rgba(13,110,253,0.25);
+  }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-dot {
+    position: absolute; left: -28px; top: 4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #0d6efd; border: 2px solid #0d1117;
+  }
+
+  /* Author card */
+  .author-card {
+    background: linear-gradient(135deg, #0d1b2e, #0a2a4a);
+    border: 1px solid rgba(13,110,253,0.25);
+    border-radius: 16px;
+    padding: 36px;
+  }
+  .author-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: #fff; font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  /* Tech stack pills */
+  .tech-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-align: center;
+    transition: border-color .2s;
+  }
+  .tech-pill:hover { border-color: rgba(13,110,253,0.5); }
+  .tech-pill-icon { font-size: 1.4rem; margin-bottom: 6px; }
+  .tech-pill-label { font-size: .75rem; color: #8899aa; }
+
+  /* Objectives */
+  .objective-card {
+    background: #12192a;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .obj-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(13,110,253,0.15);
+    border: 1px solid rgba(13,110,253,0.3);
+    color: #7ab8ff; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; flex-shrink: 0;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Page hero -->
+<section class="page-hero">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/" class="text-secondary text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item active text-white">About</li>
+      </ol>
+    </nav>
+    <div class="section-eyebrow">Project Overview</div>
+    <h1 class="display-5 fw-bold text-white mt-2">About the Project</h1>
+    <p class="text-secondary mt-2" style="max-width:620px;">
+      An academic and humanitarian research initiative at the intersection of
+      IoT engineering, cybersecurity, and disaster risk management for South Sudan.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════ MISSION ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+
+      <div class="col-lg-6">
+        <div class="section-eyebrow">Mission</div>
+        <h2 class="section-title h3 mt-2">Protecting Communities Through Technology</h2>
+        <p class="text-secondary mt-3">
+          Flooding is one of the most devastating natural hazards affecting South Sudan,
+          displacing hundreds of thousands of people each year and destroying livelihoods,
+          infrastructure, and agricultural land.
+        </p>
+        <p class="text-secondary">
+          This project designs, implements, and evaluates a <strong class="text-white">low-cost,
+          secure, IoT-based flood early warning system</strong> that can be deployed in
+          low-resource settings — using commodity hardware, open-source software, and
+          cellular internet connectivity.
+        </p>
+        <p class="text-secondary">
+          The core research questions are: <em>How can IoT technology provide effective and
+          secure real-time flood warnings in resource-constrained environments? What
+          cybersecurity controls are necessary to protect an IoT water monitoring system
+          from attack?</em>
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="row g-3">
+          {% for icon, color, title, text in [
+            ('bi-geo-alt-fill', 'text-primary', 'Study Area', 'South Sudan — specifically the Nile basin and Juba region, which experience seasonal floods from the White Nile and its tributaries.'),
+            ('bi-mortarboard-fill', 'text-info', 'Academic Context', 'Masters in Cybersecurity final year project, focusing on applied IoT security research with a humanitarian impact dimension.'),
+            ('bi-people-fill', 'text-success', 'Target Users', 'Emergency management authorities, local government, community leaders, and early warning centre operators in South Sudan.'),
+            ('bi-cpu-fill', 'text-warning', 'Technical Scope', 'Full-stack IoT system: Arduino firmware, secure REST API, real-time dashboard, multi-channel alerting, and threat modelling.')
+          ] %}
+          <div class="col-6">
+            <div class="p-3 section-card rounded-3 h-100">
+              <i class="bi {{ icon }} {{ color }} fs-3 mb-2 d-block"></i>
+              <div class="text-white fw-semibold small">{{ title }}</div>
+              <div class="text-secondary mt-1" style="font-size:.75rem;">{{ text }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ RESEARCH OBJECTIVES ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">Research</div>
+      <h2 class="section-title h3 mt-2">Research Objectives</h2>
+    </div>
+    <div class="row g-3 justify-content-center">
+      {% for num, obj in [
+        ('1', 'Design a low-cost, energy-efficient IoT sensor node using the ESP8266 microcontroller and HC-SR04 ultrasonic sensor capable of accurate water level measurement, demonstrated using a small water container.'),
+        ('2', 'Develop a secure RESTful API backend with JWT authentication, role-based access control, pre-shared API key authentication for sensor nodes, input validation, rate limiting, and comprehensive audit logging.'),
+        ('3', 'Implement a real-time web dashboard using WebSocket (Socket.IO) that presents live water level readings, multi-sensor status, trend charts, and an alert management interface to authorised operators.'),
+        ('4', 'Integrate a multi-channel alert system (SMS via Twilio, email via SMTP) that automatically notifies emergency responders when water levels cross configurable WARNING or DANGER thresholds.'),
+        ('5', 'Conduct a systematic threat analysis using the STRIDE model and evaluate the system against the OWASP IoT Top 10 security checklist, documenting identified threats and mitigations.'),
+        ('6', 'Demonstrate that affordable IoT hardware and open-source software can deliver a deployable, secure, and maintainable early warning system suitable for low-resource nation contexts.')
+      ] %}
+      <div class="col-lg-10">
+        <div class="objective-card d-flex gap-3 align-items-start">
+          <div class="obj-num">{{ num }}</div>
+          <p class="text-secondary mb-0 small">{{ obj }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ AUTHOR ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="text-center mb-5">
+          <div class="section-eyebrow">Researcher</div>
+          <h2 class="section-title h3 mt-2">About the Author</h2>
+        </div>
+
+        <div class="author-card">
+          <div class="d-flex align-items-center gap-4 mb-4">
+            <div class="author-avatar">D</div>
+            <div>
+              <h4 class="text-white fw-bold mb-1">Deng Daniel Ayuen Kur</h4>
+              <div class="text-secondary small">
+                <i class="bi bi-hash me-1 text-primary"></i>Roll No: <strong class="text-white">240103002054</strong>
+              </div>
+              <div class="text-secondary small mt-1">
+                <i class="bi bi-mortarboard me-1 text-info"></i>Masters in Cybersecurity
+              </div>
+            </div>
+          </div>
+
+          <p class="text-secondary">
+            A cybersecurity graduate researcher with a focus on IoT security, network defence,
+            and the application of technology for humanitarian impact. This project bridges
+            academic research in information security with the practical challenges of deploying
+            digital infrastructure in low-resource environments.
+          </p>
+
+          <hr class="border-secondary">
+
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-book-fill text-primary flex-shrink-0"></i>
+                <div>
+                  <div class="text-secondary" style="font-size:.75rem;">Degree</div>
+                  <div class="text-white small">Masters in Cybersecurity</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-calendar-fill text-info flex-shrink-0"></i>
+                <div>
+                  <div class="text-secondary" style="font-size:.75rem;">Academic Year</div>
+                  <div class="text-white small">2025 – 2026</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-globe-asia-australia text-success flex-shrink-0"></i>
+                <div>
+                  <div class="text-secondary" style="font-size:.75rem;">Case Study</div>
+                  <div class="text-white small">South Sudan</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-shield-fill-check text-warning flex-shrink-0"></i>
+                <div>
+                  <div class="text-secondary" style="font-size:.75rem;">Research Focus</div>
+                  <div class="text-white small">IoT Security &amp; Early Warning Systems</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TECHNOLOGY STACK ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">Built With</div>
+      <h2 class="section-title h3 mt-2">Technology Stack</h2>
+    </div>
+
+    <div class="row g-3">
+      {% for icon, label, name, color in [
+        ('bi-cpu-fill', 'Microcontroller', 'ESP8266 / NodeMCU', 'text-warning'),
+        ('bi-soundwave', 'Sensor', 'HC-SR04 Ultrasonic', 'text-info'),
+        ('bi-code-slash', 'Firmware', 'Arduino C++', 'text-primary'),
+        ('bi-server', 'Backend', 'Python / Flask', 'text-success'),
+        ('bi-database-fill', 'Database', 'SQLAlchemy / SQLite', 'text-secondary'),
+        ('bi-shield-lock', 'Auth', 'Flask-JWT-Extended', 'text-warning'),
+        ('bi-broadcast', 'Real-Time', 'Flask-SocketIO', 'text-info'),
+        ('bi-phone-fill', 'SMS Alerts', 'Twilio API', 'text-danger'),
+        ('bi-envelope-fill', 'Email Alerts', 'SMTP / Gmail', 'text-primary'),
+        ('bi-bar-chart-fill', 'Charts', 'Chart.js 4', 'text-success'),
+        ('bi-layout-text-window', 'UI Framework', 'Bootstrap 5', 'text-primary'),
+        ('bi-lock-fill', 'Rate Limiting', 'Flask-Limiter', 'text-secondary')
+      ] %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="tech-pill h-100">
+          <div class="tech-pill-icon {{ color }}"><i class="bi {{ icon }}"></i></div>
+          <div class="tech-pill-label">{{ label }}</div>
+          <div class="text-white small fw-semibold mt-1">{{ name }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TIMELINE ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <div class="section-eyebrow">Development Journey</div>
+        <h2 class="section-title h3 mt-2">Project Timeline</h2>
+        <p class="text-secondary mt-3">
+          The project progressed from a literature review and problem formulation
+          through to full system implementation, security testing, and evaluation.
+        </p>
+      </div>
+      <div class="col-lg-7">
+        <div class="timeline">
+          {% for phase, desc in [
+            ('Phase 1 — Research & Problem Formulation', 'Conducted a 20-source literature review on IoT flood monitoring, identified research gaps in security-focused systems for low-resource nations, and defined the six-layer architecture.'),
+            ('Phase 2 — System Design & Threat Modelling', 'Applied STRIDE threat modelling to the full system. Mapped each threat to a mitigation. Evaluated proposed controls against the OWASP IoT Top 10 checklist.'),
+            ('Phase 3 — Hardware Prototyping', 'Wired ESP8266 + HC-SR04 breadboard prototype. Wrote and validated firmware including 3-reading average, alert level logic, LED/buzzer control, and HTTP retry.'),
+            ('Phase 4 — Backend Development', 'Built the Flask application factory with JWT auth, API-key decorator, RBAC, SQLAlchemy models, rate limiting, audit logging, and Socket.IO real-time broadcast.'),
+            ('Phase 5 — Dashboard & Alerting', 'Developed the Bootstrap 5 dashboard with Chart.js live chart, sensor cards, alert management, and the Twilio SMS + SMTP email alert pipeline.'),
+            ('Phase 6 — Integration & Testing', 'End-to-end integration testing: sensor → server → dashboard → alerts. Security testing: brute-force rate limiting, invalid API key, expired token, role escalation attempts.'),
+            ('Phase 7 — Documentation & Submission', 'Completed academic dissertation (12,000+ words) with full literature review, methodology, results, security analysis, conclusions, and 30 real academic references.')
+          ] %}
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="fw-semibold text-white small">{{ phase }}</div>
+            <div class="text-secondary mt-1" style="font-size:.8rem;">{{ desc }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ ACKNOWLEDGEMENTS ═══════ -->
+<section class="about-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="text-center mb-4">
+          <div class="section-eyebrow">Gratitude</div>
+          <h2 class="section-title h3 mt-2">Acknowledgements</h2>
+        </div>
+
+        <div class="section-card rounded-3 p-4 p-lg-5">
+          <p class="text-secondary">
+            I would like to express my sincere gratitude to my research supervisor for their
+            invaluable guidance, constructive feedback, and continuous encouragement throughout
+            the duration of this project. Their expertise in cybersecurity and embedded systems
+            research has been instrumental in shaping both the technical direction and academic
+            rigour of this work.
+          </p>
+          <p class="text-secondary">
+            I extend my appreciation to the faculty and staff of the Department of Cybersecurity
+            for providing the academic foundation and resources necessary to undertake this research.
+            The knowledge gained through the Masters programme has directly enabled the design and
+            implementation of the security controls central to this system.
+          </p>
+          <p class="text-secondary">
+            I am grateful to the people of South Sudan, whose resilience in the face of recurring
+            flood disasters has motivated this work. It is hoped that systems such as this will
+            contribute, however modestly, to the protection of lives and livelihoods in vulnerable
+            communities.
+          </p>
+          <p class="text-secondary mb-0">
+            Finally, I thank my family for their unwavering support and patience throughout my
+            studies. This work is dedicated to all those working to use technology as a force
+            for good in under-resourced regions of the world.
+          </p>
+        </div>
+
+        <div class="text-center mt-4">
+          <div class="text-secondary small">
+            <i class="bi bi-quote text-primary me-1"></i>
+            <em>"Technology in service of humanity is the highest application of science."</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:#040b14;padding:60px 0;border-top:1px solid rgba(255,255,255,0.07);">
+  <div class="container text-center">
+    <h2 class="text-white fw-bold mb-3">Explore the System</h2>
+    <p class="text-secondary mb-4">See the features or log in to the live monitoring dashboard.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      <a href="/features"  class="btn btn-outline-primary btn-lg px-4"><i class="bi bi-lightning me-2"></i>Features</a>
+      <a href="/login"     class="btn btn-primary btn-lg px-4"><i class="bi bi-box-arrow-in-right me-2"></i>Log In</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

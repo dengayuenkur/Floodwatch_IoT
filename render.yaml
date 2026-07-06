@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: flood-monitoring-system
+    runtime: python
+    rootDir: server
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:$PORT "app:create_app('production')"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SENSOR_API_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"

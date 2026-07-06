@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables (never commit real secrets)
+.env
+
+# Flask app data
+server/instance/
+server/logs/
+*.db
+*.sqlite3
+
+# PlatformIO / Arduino build artifacts
+firmware/**/.pio/
+firmware/**/build/
+
+# OS / editor
+.DS_Store
+Thumbs.db

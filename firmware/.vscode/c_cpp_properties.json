@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "name": "ESP8266",
+      "includePath": [
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/cores/esp8266",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/variants/nodemcu",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/libraries/**",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/tools/sdk/include",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/tools/sdk/lwip2/include",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/hardware/esp8266/3.1.2/tools/sdk/lwip2/include/arch",
+        "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/tools/**",
+        "C:/Users/denga/Documents/Arduino/libraries/ArduinoJson-7.4.3/src"
+      ],
+      "defines": [
+        "ESP8266",
+        "ARDUINO=10819",
+        "LWIP_OPEN_SRC"
+      ],
+      "compilerPath": "C:/Users/denga/AppData/Local/Arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/xtensa-lx106-elf-gcc.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "gcc-x86"
+    }
+  ],
+  "version": 4
+}

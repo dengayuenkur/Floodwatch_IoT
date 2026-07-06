@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Login — FloodWatch IoT{% endblock %}
+
+{% block body %}
+<div class="min-vh-100 d-flex align-items-center justify-content-center"
+     style="background: linear-gradient(135deg, #0d1117 0%, #0a2a4a 100%);">
+
+  <div class="card bg-dark border-secondary shadow-lg" style="width: 420px;">
+    <!-- Card header -->
+    <div class="card-header bg-primary bg-gradient py-3 text-center border-0 rounded-top">
+      <div class="mb-2">
+        <i class="bi bi-water fs-1 text-white"></i>
+      </div>
+      <h4 class="mb-0 fw-bold text-white">FloodWatch IoT</h4>
+      <small class="text-white-50">Water Level Monitoring System</small>
+    </div>
+
+    <div class="card-body p-4">
+      <!-- Error banner -->
+      <div id="loginError" class="alert alert-danger d-none" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span id="loginErrorMsg">Invalid credentials</span>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="mb-3">
+          <label for="username" class="form-label text-secondary">Username</label>
+          <div class="input-group">
+            <span class="input-group-text bg-secondary border-secondary text-light">
+              <i class="bi bi-person-fill"></i>
+            </span>
+            <input type="text" class="form-control bg-dark border-secondary text-light"
+                   id="username" name="username" placeholder="Enter username"
+                   autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="form-label text-secondary">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-secondary border-secondary text-light">
+              <i class="bi bi-lock-fill"></i>
+            </span>
+            <input type="password" class="form-control bg-dark border-secondary text-light"
+                   id="password" name="password" placeholder="Enter password"
+                   autocomplete="current-password" required />
+            <button type="button" class="btn btn-secondary border-secondary"
+                    id="togglePassword" tabindex="-1">
+              <i class="bi bi-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold"
+                id="loginBtn">
+          <span id="loginSpinner" class="spinner-border spinner-border-sm me-2 d-none"
+                role="status"></span>
+          <i class="bi bi-box-arrow-in-right me-1" id="loginIcon"></i>
+          Sign In
+        </button>
+      </form>
+    </div>
+
+    <div class="card-footer text-center text-secondary py-2 border-secondary"
+         style="font-size: 0.75rem;">
+      South Sudan Flood Management System &copy; 2026<br/>
+      <span class="text-muted">Deng Daniel Ayuen Kur — Roll No: 240103002054</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const form        = document.getElementById('loginForm');
+  const loginBtn    = document.getElementById('loginBtn');
+  const spinner     = document.getElementById('loginSpinner');
+  const loginIcon   = document.getElementById('loginIcon');
+  const errorDiv    = document.getElementById('loginError');
+  const errorMsg    = document.getElementById('loginErrorMsg');
+  const toggleBtn   = document.getElementById('togglePassword');
+  const eyeIcon     = document.getElementById('eyeIcon');
+  const passwordFld = document.getElementById('password');
+
+  toggleBtn.addEventListener('click', () => {
+    const visible = passwordFld.type === 'text';
+    passwordFld.type = visible ? 'password' : 'text';
+    eyeIcon.className = visible ? 'bi bi-eye' : 'bi bi-eye-slash';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorDiv.classList.add('d-none');
+    setLoading(true);
+
+    const username = document.getElementById('username').value.trim();
+    const password = passwordFld.value;
+
+    try {
+      const res = await fetch('/api/v1/auth/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('username',     data.user.username);
+        localStorage.setItem('role',         data.user.role);
+        window.location.href = '/dashboard';
+      } else {
+        showError(data.error || 'Login failed. Please try again.');
+      }
+    } catch (err) {
+      showError('Network error — please check your connection.');
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  function setLoading(state) {
+    loginBtn.disabled    = state;
+    spinner.classList.toggle('d-none', !state);
+    loginIcon.classList.toggle('d-none', state);
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    errorDiv.classList.remove('d-none');
+  }
+
+  // Redirect if already logged in
+  if (localStorage.getItem('access_token')) {
+    window.location.href = '/dashboard';
+  }
+</script>
+{% endblock %}

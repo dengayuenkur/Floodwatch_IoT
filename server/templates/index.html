@@ -1,0 +1,558 @@
+{% extends "base_public.html" %}
+{% set active_page = 'home' %}
+{% block title %}FloodWatch IoT — Real-Time Flood Early Warning for South Sudan{% endblock %}
+
+{% block head_extra %}
+<style>
+  /* ── Hero ───────────────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, #040b14 0%, #0a1f3c 50%, #0a2a4a 100%);
+    padding: 100px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(13,110,253,0.12) 0%, transparent 70%);
+  }
+  .hero-badge {
+    background: rgba(13,110,253,0.15);
+    border: 1px solid rgba(13,110,253,0.4);
+    color: #7ab8ff;
+    font-size: .78rem;
+    letter-spacing: 1px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 1.2rem;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+  }
+  .hero-title .accent { color: #0dcaf0; }
+  .hero-subtitle {
+    color: #99aabb;
+    font-size: 1.1rem;
+    max-width: 580px;
+    line-height: 1.7;
+  }
+  .hero-visual {
+    background: linear-gradient(135deg, #0d1b2e, #0a2a4a);
+    border: 1px solid rgba(13,110,253,0.3);
+    border-radius: 16px;
+    padding: 28px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+  }
+  .sensor-reading-demo {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── Stats bar ──────────────────────────────────────────────── */
+  .stats-bar {
+    background: #0a1628;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-item { text-align: center; padding: 24px 16px; }
+  .stat-number { font-size: 2rem; font-weight: 800; color: #0dcaf0; }
+  .stat-label  { font-size: .8rem; color: #7788aa; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── How it works ───────────────────────────────────────────── */
+  .step-num {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1.1rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .step-connector {
+    width: 2px; height: 40px; background: rgba(13,110,253,0.3);
+    margin: 0 auto;
+  }
+
+  /* ── Alert level cards ──────────────────────────────────────── */
+  .alert-card-safe    { border-top: 4px solid #198754 !important; }
+  .alert-card-warning { border-top: 4px solid #ffc107 !important; }
+  .alert-card-danger  { border-top: 4px solid #dc3545 !important; }
+
+  /* ── Feature mini cards ─────────────────────────────────────── */
+  .feature-icon {
+    width: 52px; height: 52px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  /* ── CTA band ───────────────────────────────────────────────── */
+  .cta-band {
+    background: linear-gradient(135deg, #0a1f3c 0%, #0d3b6e 100%);
+    border-top: 1px solid rgba(13,110,253,0.3);
+    border-bottom: 1px solid rgba(13,110,253,0.3);
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="container position-relative">
+    <div class="row align-items-center g-5">
+
+      <!-- Text -->
+      <div class="col-lg-6">
+        <h1 class="hero-title mb-4">
+          Intelligent Flood<br>
+          Early Warning<br>
+          for <span class="accent">South Sudan</span>
+        </h1>
+        <p class="hero-subtitle mb-5">
+          A Secure IoT system that monitors river water levels in real time,
+          triggers multi-level alerts, and empowers emergency responders to
+          protect communities before disaster strikes.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="/dashboard" class="btn btn-primary btn-lg px-4 shadow">
+            <i class="bi bi-speedometer2 me-2"></i>Live Dashboard
+          </a>
+          <a href="/features" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-lightning me-2"></i>Explore Features
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual panel -->
+      <div class="col-lg-6">
+        <div class="hero-visual">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <span class="text-white fw-semibold">
+              <i class="bi bi-activity text-primary me-2"></i>Live Sensor Feed
+            </span>
+            <span class="badge bg-success">
+              <i class="bi bi-circle-fill me-1" style="font-size:.5rem;"></i>Active
+            </span>
+          </div>
+
+          <div class="sensor-reading-demo">
+            <div>
+              <div class="text-secondary small">Nile River — Station Alpha</div>
+              <div class="fw-bold text-white">SENSOR_NILE_01</div>
+            </div>
+            <div class="text-end">
+              <div class="text-success fw-bold fs-5">142 cm</div>
+              <span class="badge bg-success">SAFE</span>
+            </div>
+          </div>
+
+          <div class="sensor-reading-demo">
+            <div>
+              <div class="text-secondary small">Juba Bridge Monitoring</div>
+              <div class="fw-bold text-white">SENSOR_JUBA_02</div>
+            </div>
+            <div class="text-end">
+              <div class="text-warning fw-bold fs-5">218 cm</div>
+              <span class="badge bg-warning text-dark">WARNING</span>
+            </div>
+          </div>
+
+          <div class="sensor-reading-demo" style="border-color:rgba(220,53,69,0.4);">
+            <div>
+              <div class="text-secondary small">Bahr el Ghazal — Station</div>
+              <div class="fw-bold text-white">SENSOR_BAHR_03</div>
+            </div>
+            <div class="text-end">
+              <div class="text-danger fw-bold fs-5">287 cm</div>
+              <span class="badge bg-danger">DANGER</span>
+            </div>
+          </div>
+
+          <div class="row g-2 mt-2">
+            <div class="col-4 text-center p-2 rounded" style="background:rgba(25,135,84,0.1);border:1px solid rgba(25,135,84,0.2)">
+              <div class="text-success fw-bold">1</div>
+              <div class="text-secondary" style="font-size:.7rem;">SAFE</div>
+            </div>
+            <div class="col-4 text-center p-2 rounded" style="background:rgba(255,193,7,0.1);border:1px solid rgba(255,193,7,0.2)">
+              <div class="text-warning fw-bold">1</div>
+              <div class="text-secondary" style="font-size:.7rem;">WARNING</div>
+            </div>
+            <div class="col-4 text-center p-2 rounded" style="background:rgba(220,53,69,0.1);border:1px solid rgba(220,53,69,0.2)">
+              <div class="text-danger fw-bold">1</div>
+              <div class="text-secondary" style="font-size:.7rem;">DANGER</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider" style="background:#040b14;margin-top:-1px;">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:50px;width:100%;">
+    <path d="M0,30 C360,55 1080,5 1440,30 L1440,50 L0,50 Z" fill="#0a1628"/>
+  </svg>
+</div>
+
+<!-- ═══════════ STATS BAR ═══════════ -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="row g-0 text-center">
+      <div class="col-6 col-md-3 border-end border-secondary">
+        <div class="stat-item">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Continuous Monitoring</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 border-end border-secondary">
+        <div class="stat-item">
+          <div class="stat-number">10s</div>
+          <div class="stat-label">Reading Interval</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 border-end border-secondary">
+        <div class="stat-item">
+          <div class="stat-number">3</div>
+          <div class="stat-label">Alert Levels</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-item">
+          <div class="stat-number">6</div>
+          <div class="stat-label">Architecture Layers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section class="py-6 section-navy" style="padding: 80px 0;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">System Flow</div>
+      <h2 class="section-title display-6 mt-2">How It Works</h2>
+      <p class="text-secondary mx-auto" style="max-width:500px;">
+        From river sensor to emergency alert in seconds — a fully automated pipeline.
+      </p>
+    </div>
+
+    <div class="row g-4 align-items-start justify-content-center">
+
+      <div class="col-md-2 text-center">
+        <div class="step-num mx-auto mb-3">1</div>
+        <div class="p-3 rounded-3 section-card h-100">
+          <i class="bi bi-cpu fs-2 text-primary mb-2 d-block"></i>
+          <h6 class="text-white fw-bold">Sense</h6>
+          <p class="text-secondary small mb-0">
+            ESP8266 + HC-SR04 measures water distance every 10 seconds
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-1 d-none d-md-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-right text-primary fs-3"></i>
+      </div>
+
+      <div class="col-md-2 text-center">
+        <div class="step-num mx-auto mb-3">2</div>
+        <div class="p-3 rounded-3 section-card h-100">
+          <i class="bi bi-wifi fs-2 text-info mb-2 d-block"></i>
+          <h6 class="text-white fw-bold">Transmit</h6>
+          <p class="text-secondary small mb-0">
+            Authenticated HTTPS POST with API-key header to the Flask server
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-1 d-none d-md-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-right text-primary fs-3"></i>
+      </div>
+
+      <div class="col-md-2 text-center">
+        <div class="step-num mx-auto mb-3">3</div>
+        <div class="p-3 rounded-3 section-card h-100">
+          <i class="bi bi-database-check fs-2 text-success mb-2 d-block"></i>
+          <h6 class="text-white fw-bold">Process</h6>
+          <p class="text-secondary small mb-0">
+            Server validates, stores reading, evaluates thresholds in real time
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-1 d-none d-md-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-right text-primary fs-3"></i>
+      </div>
+
+      <div class="col-md-2 text-center">
+        <div class="step-num mx-auto mb-3">4</div>
+        <div class="p-3 rounded-3 section-card h-100">
+          <i class="bi bi-bell-fill fs-2 text-warning mb-2 d-block"></i>
+          <h6 class="text-white fw-bold">Alert</h6>
+          <p class="text-secondary small mb-0">
+            Dashboard updates live; SMS + email fire to emergency contacts
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div style="background:#0a1628;margin-bottom:-1px;">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:50px;width:100%;">
+    <path d="M0,20 C480,50 960,0 1440,20 L1440,50 L0,50 Z" fill="#0d1117"/>
+  </svg>
+</div>
+
+<!-- ═══════════ ALERT LEVELS ═══════════ -->
+<section class="py-6 section-dark" style="padding: 80px 0;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">Alert System</div>
+      <h2 class="section-title display-6 mt-2">Three-Level Warning System</h2>
+      <p class="text-secondary mx-auto" style="max-width:520px;">
+        Graduated alerts give communities time to prepare and evacuate before conditions become critical.
+      </p>
+    </div>
+
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100 alert-card-safe card-lift">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:rgba(25,135,84,0.15);border:1px solid rgba(25,135,84,0.4);">
+                <i class="bi bi-check-circle-fill text-success fs-4"></i>
+              </div>
+              <div>
+                <span class="badge bg-success px-3 py-2 fs-6">SAFE</span>
+                <div class="text-secondary small mt-1">Alert Level 1</div>
+              </div>
+            </div>
+            <h5 class="text-white">Normal Water Level</h5>
+            <p class="text-secondary small">
+              Sensor distance &gt; 200 cm. Water levels are within normal range.
+              Green LED is active. System continues routine monitoring every 10 seconds.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li><i class="bi bi-dot text-success"></i>Green LED illuminated</li>
+              <li><i class="bi bi-dot text-success"></i>No alerts triggered</li>
+              <li><i class="bi bi-dot text-success"></i>Continuous data logging</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100 alert-card-warning card-lift">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:rgba(255,193,7,0.15);border:1px solid rgba(255,193,7,0.4);">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
+              </div>
+              <div>
+                <span class="badge bg-warning text-dark px-3 py-2 fs-6">WARNING</span>
+                <div class="text-secondary small mt-1">Alert Level 2</div>
+              </div>
+            </div>
+            <h5 class="text-white">Rising Water Level</h5>
+            <p class="text-secondary small">
+              Sensor distance 50–100 cm. Water levels are rising above safe threshold.
+              Yellow LED, warning beep, and automatic SMS + email to responders.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li><i class="bi bi-dot text-warning"></i>Yellow LED + warning tone</li>
+              <li><i class="bi bi-dot text-warning"></i>SMS & email alert sent</li>
+              <li><i class="bi bi-dot text-warning"></i>Dashboard alert created</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card bg-dark border-secondary h-100 alert-card-danger card-lift pulse-danger">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:rgba(220,53,69,0.15);border:1px solid rgba(220,53,69,0.4);">
+                <i class="bi bi-exclamation-octagon-fill text-danger fs-4"></i>
+              </div>
+              <div>
+                <span class="badge bg-danger px-3 py-2 fs-6">DANGER</span>
+                <div class="text-secondary small mt-1">Alert Level 3</div>
+              </div>
+            </div>
+            <h5 class="text-white">Critical Flood Danger</h5>
+            <p class="text-secondary small">
+              Sensor distance &lt; 50 cm. Immediate evacuation required.
+              Red LED, rapid alarm beeps (×3), and urgent alerts to all channels.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li><i class="bi bi-dot text-danger"></i>Red LED + rapid alarm</li>
+              <li><i class="bi bi-dot text-danger"></i>Urgent SMS & email blast</li>
+              <li><i class="bi bi-dot text-danger"></i>Immediate action required</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ KEY FEATURES ═══════════ -->
+<section class="section-navy" style="padding: 80px 0;">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-eyebrow">Capabilities</div>
+      <h2 class="section-title display-6 mt-2">Built for <span>Reliability</span></h2>
+      <p class="text-secondary mx-auto" style="max-width:500px;">
+        Every layer of the system is designed with security, resilience, and low-resource deployment in mind.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      {% set features = [
+        ('bi-shield-lock-fill', 'bg-primary', 'IoT Security', 'JWT auth, pre-shared API key, rate limiting, RBAC, audit logging — OWASP IoT Top 10 compliant.'),
+        ('bi-lightning-charge-fill', 'bg-warning text-dark', 'Real-Time WebSocket', 'Socket.IO pushes live readings to every connected browser with no page refresh required.'),
+        ('bi-phone-fill', 'bg-success', 'SMS Alerts', 'Twilio-powered SMS to emergency contacts the moment a threshold is crossed.'),
+        ('bi-envelope-fill', 'bg-info text-dark', 'Email Alerts', 'Formatted SMTP email alerts sent automatically with full sensor and water-level details.'),
+        ('bi-people-fill', 'bg-secondary', 'Role-Based Access', 'Three roles — Admin, Operator, Viewer — each with tailored permissions for staff and observers.'),
+        ('bi-graph-up-arrow', 'bg-danger', 'Historical Data', 'All readings persisted to database with 90-day retention, queryable for trend analysis.')
+      ] %}
+      {% for icon, badge, title, desc in features %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card-lift rounded-3 p-4 h-100">
+          <div class="feature-icon {{ badge }}">
+            <i class="bi {{ icon }}"></i>
+          </div>
+          <h6 class="text-white fw-bold mb-2">{{ title }}</h6>
+          <p class="text-secondary small mb-0">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-5">
+      <a href="/features" class="btn btn-outline-primary px-4">
+        View All Features <i class="bi bi-arrow-right ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ WHY IT MATTERS ═══════════ -->
+<section class="section-dark" style="padding: 80px 0;">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+
+      <div class="col-lg-6">
+        <div class="section-eyebrow">Context</div>
+        <h2 class="section-title display-6 mt-2">Why South Sudan Needs This System</h2>
+        <p class="text-secondary mt-3">
+          South Sudan experiences severe annual flooding driven by heavy rainfall in the
+          Ethiopian Highlands and the Equatorial Lakes region, affecting millions of
+          people across the Nile basin.
+        </p>
+        <p class="text-secondary">
+          With limited infrastructure and communication networks, communities are often
+          caught unprepared. A low-cost, IoT-based early warning system can provide
+          critical lead time for evacuation and emergency response.
+        </p>
+        <div class="d-flex flex-column gap-3 mt-4">
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span class="text-secondary">Early warning saves lives — even 30 minutes' notice can enable evacuation</span>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span class="text-secondary">Low-cost hardware (ESP8266 + HC-SR04) affordable for low-resource nations</span>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span class="text-secondary">Operates on cellular WiFi hotspot — no fixed broadband required</span>
+          </div>
+          <div class="d-flex gap-3 align-items-start">
+            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+            <span class="text-secondary">Solar-powered field deployment for remote riverside locations</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="p-4 rounded-3 text-center section-card h-100">
+              <i class="bi bi-people-fill fs-1 text-primary mb-3 d-block"></i>
+              <div class="fw-bold text-white fs-4">Millions</div>
+              <div class="text-secondary small">affected by floods annually in South Sudan</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 rounded-3 text-center section-card h-100">
+              <i class="bi bi-clock-history fs-1 text-warning mb-3 d-block"></i>
+              <div class="fw-bold text-white fs-4">10 sec</div>
+              <div class="text-secondary small">between each sensor reading and dashboard update</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 rounded-3 text-center section-card h-100">
+              <i class="bi bi-battery-charging fs-1 text-success mb-3 d-block"></i>
+              <div class="fw-bold text-white fs-4">Solar</div>
+              <div class="text-secondary small">powered deployment option for off-grid sites</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-4 rounded-3 text-center section-card h-100">
+              <i class="bi bi-shield-fill-check fs-1 text-info mb-3 d-block"></i>
+              <div class="fw-bold text-white fs-4">Secure</div>
+              <div class="text-secondary small">OWASP IoT Top 10 security controls implemented</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA BAND ═══════════ -->
+<section class="cta-band" style="padding: 70px 0;">
+  <div class="container text-center">
+    <i class="bi bi-water text-primary display-4 mb-3 d-block"></i>
+    <h2 class="text-white fw-bold display-6 mb-3">Start Monitoring Now</h2>
+    <p class="text-secondary mb-5 mx-auto" style="max-width:480px;">
+      Log in to the secure dashboard to view live sensor readings, manage alerts,
+      and protect communities from flood risk.
+    </p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+      <a href="/login" class="btn btn-primary btn-lg px-5 shadow">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+      </a>
+      <a href="/about" class="btn btn-outline-light btn-lg px-4">
+        <i class="bi bi-info-circle me-2"></i>About the Project
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
