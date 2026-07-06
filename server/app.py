@@ -172,6 +172,13 @@ def _register_dashboard_routes(app: Flask) -> None:
     def index():
         return render_template("index.html")
 
+    @app.route("/healthz")
+    @limiter.exempt
+    def healthz():
+        # Dedicated health-check endpoint so hosting platforms (Render, etc.)
+        # can poll frequently without tripping the rate limit on "/".
+        return jsonify(status="ok"), 200
+
     @app.route("/features")
     def features_page():
         return render_template("features.html")
